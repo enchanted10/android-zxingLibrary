@@ -21,7 +21,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks{
+public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks, SecondActivity.OnResultCallback {
 
     /**
      * 扫描跳转Activity RequestCode
@@ -68,6 +68,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
      * 初始化组件
      */
     private void initView() {
+        SecondActivity.SetOnResultCallback(this);
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
@@ -190,6 +191,11 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     .build()
                     .show();
         }
+    }
+
+    @Override
+    public void result(int requestCode, int resultCode, Intent data) {
+        onActivityResult(requestCode,resultCode,data);
     }
 
 

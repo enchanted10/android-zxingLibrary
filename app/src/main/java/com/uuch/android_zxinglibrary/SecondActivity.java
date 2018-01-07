@@ -2,13 +2,17 @@ package com.uuch.android_zxinglibrary;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.uuzuche.lib_zxing.activity.CaptureFragment;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
+
+import static com.uuch.android_zxinglibrary.MainActivity.REQUEST_CAMERA_PERM;
+import static com.uuch.android_zxinglibrary.MainActivity.REQUEST_IMAGE;
 
 /**
  * 定制化显示扫描界面
@@ -33,7 +37,8 @@ public class SecondActivity extends BaseActivity {
     public static boolean isOpen = false;
 
     private void initView() {
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linear1);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.flashLightLayout);
+        LinearLayout albumLayout = (LinearLayout) findViewById(R.id.albumLayout);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +52,26 @@ public class SecondActivity extends BaseActivity {
 
             }
         });
+        albumLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, REQUEST_IMAGE);
+            }
+        });
     }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mOnResultCallback.result(requestCode,resultCode,data);
+        finish();
+    }
+
+
 
 
     /**
@@ -76,4 +100,11 @@ public class SecondActivity extends BaseActivity {
             SecondActivity.this.finish();
         }
     };
+    private static OnResultCallback mOnResultCallback;
+    public static void SetOnResultCallback(OnResultCallback callback){
+        mOnResultCallback = callback;
+    }
+    interface OnResultCallback{
+        void result(int requestCode, int resultCode, Intent data);
+    }
 }
